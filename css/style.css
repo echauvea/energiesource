@@ -1,17 +1,28 @@
 :root {
-  color-scheme: light dark;
-  --fond: #ffffff;
-  --texte: #1a1a1a;
-  --bordure: #d8d8d8;
-  --accent: #1a6b3c;
-  --accent-negatif: #b3261e;
+  color-scheme: dark;
+  --fond: #241a12;
+  --fond-panneau: #2e2013;
+  --bois: #1a120b;
+  --laiton: #c8963e;
+  --laiton-clair: #e6c179;
+  --laiton-sombre: #8a6224;
+  --cuivre: #b5652d;
+  --texte: #ecdcb8;
+  --texte-att: #cbb289;
+  --bordure: #5a3f22;
+  --accent: #5f8f52;
+  --accent-negatif: #a3402e;
+  --ombre: rgba(0, 0, 0, 0.55);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fond: #121212;
-    --texte: #e8e8e8;
-    --bordure: #3a3a3a;
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --fond: #e8dcc4;
+    --fond-panneau: #ede1c8;
+    --bois: #d8c8a0;
+    --texte: #2b2013;
+    --texte-att: #4a3a22;
+    --bordure: #b39b6b;
   }
 }
 
@@ -21,151 +32,336 @@
 
 body {
   margin: 0;
-  padding: 1rem;
+  padding: 2rem 1rem 3rem;
   background: var(--fond);
+  background-image:
+    radial-gradient(ellipse at top, rgba(200, 150, 62, 0.08), transparent 60%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15) 0px,
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 3px
+    );
   color: var(--texte);
-  font-family: system-ui, sans-serif;
+  font-family: 'Special Elite', 'Courier New', monospace;
   max-width: 42rem;
   margin-inline: auto;
+  position: relative;
 }
 
+h1, .poste-nom, .chaine-libelle {
+  font-family: 'Cinzel', serif;
+}
+
+/* --- Engrenages décoratifs --- */
+
+.engrenage {
+  position: fixed;
+  width: 6rem;
+  height: 6rem;
+  color: var(--laiton-sombre);
+  opacity: 0.35;
+  filter: drop-shadow(0 0 6px var(--ombre));
+  pointer-events: none;
+  z-index: 0;
+  animation: tourner 40s linear infinite;
+}
+
+.engrenage--gauche {
+  top: 1rem;
+  left: -1.5rem;
+}
+
+.engrenage--droite {
+  top: 3rem;
+  right: -1.5rem;
+  animation-direction: reverse;
+  animation-duration: 32s;
+}
+
+@keyframes tourner {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 30rem) {
+  .engrenage {
+    width: 3.5rem;
+    height: 3.5rem;
+    opacity: 0.22;
+  }
+}
+
+/* --- Panneau total : cadran principal --- */
+
 header#total {
-  border: 1px solid var(--bordure);
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+  border: 3px solid var(--laiton-sombre);
+  border-radius: 0.6rem;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1.5rem;
+  background:
+    linear-gradient(160deg, var(--fond-panneau), var(--bois));
+  box-shadow:
+    inset 0 0 0 1px var(--laiton),
+    inset 0 2px 10px var(--ombre),
+    0 4px 12px var(--ombre);
 }
 
 header#total h1 {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin: 0 0 0.5rem;
-  opacity: 0.7;
+  letter-spacing: 0.15em;
+  margin: 0 0 0.6rem;
+  color: var(--laiton-clair);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
 .total-chiffre {
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 400;
   margin: 0;
+  color: var(--laiton-clair);
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 8px rgba(230, 193, 121, 0.35), 0 2px 0 rgba(0, 0, 0, 0.6);
 }
 
 #total-ecart {
-  margin: 0.25rem 0 0;
+  margin: 0.35rem 0 0;
+  color: var(--texte);
 }
 
 #total-hors {
-  margin: 0.25rem 0 0;
-  opacity: 0.6;
-  font-size: 0.85rem;
+  margin: 0.35rem 0 0;
+  color: var(--texte-att);
+  font-size: 0.8rem;
 }
 
+/* --- Postes : compartiments du laboratoire --- */
+
 .poste {
-  border: 1px solid var(--bordure);
-  border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+  border: 2px solid var(--bordure);
+  border-radius: 0.4rem;
+  margin-bottom: 0.7rem;
   overflow: hidden;
+  background: linear-gradient(180deg, var(--fond-panneau), var(--fond));
+  box-shadow: inset 0 0 0 1px rgba(200, 150, 62, 0.15), 0 2px 6px var(--ombre);
 }
 
 .poste-header {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   background: none;
   border: none;
   color: inherit;
   font: inherit;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1rem;
   cursor: pointer;
   text-align: left;
 }
 
+.poste-header:hover {
+  background: rgba(200, 150, 62, 0.08);
+}
+
 .poste-chevron {
   width: 1em;
+  color: var(--laiton);
 }
 
 .poste-nom {
   flex: 1;
+  letter-spacing: 0.02em;
+  color: var(--texte);
 }
 
 .poste-ecart {
   font-variant-numeric: tabular-nums;
-  opacity: 0.8;
+  color: var(--laiton-clair);
+  background: var(--bois);
+  border: 1px solid var(--laiton-sombre);
+  border-radius: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.85rem;
 }
 
 .chaines {
-  padding: 0 1rem 0.5rem;
+  padding: 0.2rem 1rem 0.6rem;
 }
 
 .chaine {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0;
+  gap: 0.6rem;
+  padding: 0.55rem 0;
   border-top: 1px solid var(--bordure);
+  flex-wrap: wrap;
 }
 
 .chaine-libelle {
   flex: 0 0 9rem;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  color: var(--texte-att);
 }
+
+/* --- Curseur façon manomètre en laiton --- */
 
 .chaine-slider {
   flex: 1;
+  min-width: 6rem;
+  --valeur-pct: 0%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 1.1rem;
+  background: transparent;
+  cursor: pointer;
+}
+
+.chaine-slider:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.chaine-slider::-webkit-slider-runnable-track {
+  height: 0.55rem;
+  border-radius: 0.3rem;
+  background:
+    linear-gradient(90deg, var(--cuivre) 0%, var(--laiton-clair) var(--valeur-pct), var(--bois) var(--valeur-pct), var(--bois) 100%);
+  border: 1px solid var(--laiton-sombre);
+  box-shadow: inset 0 1px 3px var(--ombre);
+}
+
+.chaine-slider::-moz-range-track {
+  height: 0.55rem;
+  border-radius: 0.3rem;
+  background: var(--bois);
+  border: 1px solid var(--laiton-sombre);
+  box-shadow: inset 0 1px 3px var(--ombre);
+}
+
+.chaine-slider::-moz-range-progress {
+  height: 0.55rem;
+  border-radius: 0.3rem 0 0 0.3rem;
+  background: linear-gradient(90deg, var(--cuivre), var(--laiton-clair));
+}
+
+.chaine-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  margin-top: -0.4rem;
+  background:
+    radial-gradient(circle at 35% 30%, var(--laiton-clair), var(--laiton) 55%, var(--laiton-sombre) 100%);
+  border: 1px solid var(--laiton-sombre);
+  box-shadow: 0 1px 3px var(--ombre), inset 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.chaine-slider::-moz-range-thumb {
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, var(--laiton-clair), var(--laiton) 55%, var(--laiton-sombre) 100%);
+  border: 1px solid var(--laiton-sombre);
+  box-shadow: 0 1px 3px var(--ombre), inset 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.chaine-slider:disabled::-webkit-slider-thumb {
+  background: radial-gradient(circle at 35% 30%, #9a9a9a, #6b6b6b 55%, #4a4a4a 100%);
+}
+
+.chaine-slider:disabled::-moz-range-thumb {
+  background: radial-gradient(circle at 35% 30%, #9a9a9a, #6b6b6b 55%, #4a4a4a 100%);
 }
 
 .chaine-pct {
   flex: 0 0 3.5rem;
   text-align: right;
   font-variant-numeric: tabular-nums;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  color: var(--laiton-clair);
 }
+
+/* --- Bouton de verrou : rivet en cuivre --- */
 
 .chaine-verrou {
   flex: 0 0 auto;
-  font-size: 0.75rem;
-  padding: 0.2rem 0.5rem;
-  border: 1px solid var(--bordure);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--laiton-sombre);
   border-radius: 0.3rem;
-  background: none;
-  color: inherit;
+  background: linear-gradient(180deg, var(--fond-panneau), var(--bois));
+  color: var(--texte-att);
   cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 2px var(--ombre);
+}
+
+.chaine-verrou[aria-pressed='true'] {
+  background: linear-gradient(180deg, var(--cuivre), var(--laiton-sombre));
+  color: var(--bois);
+  border-color: var(--laiton);
 }
 
 .chaine-verrouillee {
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 .chaine-plafond {
   flex: 0 0 auto;
-  font-size: 0.75rem;
-  opacity: 0.6;
+  font-size: 0.7rem;
+  color: var(--texte-att);
 }
+
+/* --- Étiquettes de fiabilité : cachets de cire --- */
 
 .chaine-fiabilite {
   flex: 0 0 auto;
-  font-size: 0.7rem;
-  padding: 0.1rem 0.4rem;
-  border-radius: 0.2rem;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 1rem;
   cursor: help;
-  opacity: 0.85;
+  border: 1px solid transparent;
 }
 
 .fiabilite-etabli, .fiabilite-robuste {
-  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  background: color-mix(in srgb, var(--accent) 30%, var(--bois));
+  border-color: color-mix(in srgb, var(--accent) 50%, black);
+  color: #d9e8d2;
 }
 
 .fiabilite-debattu, .fiabilite-a_sourcer {
-  background: color-mix(in srgb, var(--accent-negatif) 15%, transparent);
+  background: color-mix(in srgb, var(--accent-negatif) 35%, var(--bois));
+  border-color: color-mix(in srgb, var(--accent-negatif) 55%, black);
+  color: #f0dcd4;
 }
 
 .poste-reset {
-  margin: 0.5rem 1rem 0.75rem;
-  padding: 0.4rem 0.8rem;
-  border: 1px solid var(--bordure);
+  margin: 0.4rem 1rem 0.85rem;
+  padding: 0.4rem 0.9rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--laiton-sombre);
   border-radius: 0.3rem;
-  background: none;
-  color: inherit;
+  background: linear-gradient(180deg, var(--fond-panneau), var(--bois));
+  color: var(--laiton-clair);
   cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 3px var(--ombre);
+}
+
+.poste-reset:hover {
+  background: linear-gradient(180deg, var(--cuivre), var(--laiton-sombre));
+  color: var(--bois);
 }

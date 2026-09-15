@@ -126,6 +126,7 @@ function renderChaine(poste, chaine) {
   slider.disabled = verrou;
   slider.className = 'chaine-slider';
   slider.setAttribute('aria-label', chaine.libelle);
+  slider.style.setProperty('--valeur-pct', `${(Number(slider.value) / maxPct) * 100}%`);
   row.appendChild(slider);
 
   const pctLabel = document.createElement('span');
@@ -135,6 +136,7 @@ function renderChaine(poste, chaine) {
 
   slider.addEventListener('input', () => {
     pctLabel.textContent = `${slider.value} %`;
+    slider.style.setProperty('--valeur-pct', `${(Number(slider.value) / maxPct) * 100}%`);
   });
 
   slider.addEventListener('change', () => {
