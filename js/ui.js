@@ -56,7 +56,9 @@ function renderPostes(resultat) {
 
 function renderPoste(poste, resultat) {
   const ouvert = posteOuverts.has(poste.id);
-  const ecart = resultat.ecarts[poste.id];
+  const { simule, actuel } = resultat.parPoste[poste.id];
+  const vsActuel = actuel ? ((simule - actuel) / actuel) * 100 : 0;
+  const deltaP = resultat.ecarts[poste.id]; // écart de calibration (§4.2), pas affiché en clair
 
   const section = document.createElement('section');
   section.className = 'poste';
@@ -64,9 +66,10 @@ function renderPoste(poste, resultat) {
   const header = document.createElement('button');
   header.className = 'poste-header';
   header.setAttribute('aria-expanded', String(ouvert));
+  header.title = `Écart au réel (Δp) : ${formatPct(deltaP)} — voir §4.2 du document de conception`;
   header.innerHTML = `<span class="poste-chevron">${ouvert ? '▾' : '▸'}</span>` +
     `<span class="poste-nom">${poste.nom}</span>` +
-    `<span class="poste-ecart">${formatPct(ecart)}</span>`;
+    `<span class="poste-ecart">${formatPct(vsActuel)}</span>`;
   header.addEventListener('click', () => {
     if (ouvert) posteOuverts.delete(poste.id);
     else posteOuverts.add(poste.id);
