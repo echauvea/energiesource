@@ -1,0 +1,179 @@
+{
+  "version": "2026-09",
+  "hors_perimetre_mt": 17200,
+  "_note_unites": "volume_annuel est toujours exprimé en unité de base (kWh, pass·km, tonne) — jamais en giga-multiple. V_p et facteur_combustion/facteur_procede partagent donc directement la même unité, sans facteur de conversion dans le calcul. Mt CO2e affiché en interface = résultat brut (grammes) / 10^12, un formatage, pas une étape du modèle.",
+  "postes": [
+    {
+      "id": "chaleur_industrielle",
+      "nom": "Chaleur industrielle",
+      "volume_annuel": 2.6e13,
+      "unite": "kWh",
+      "emissions_constatees_mt": 9000,
+      "facteur_procede": 0,
+      "chaines": [
+        { "id": "chind_charbon_four", "libelle": "Four à charbon", "source_primaire": "charbon", "vecteur": "direct", "convertisseur": "four industriel", "facteur_combustion": 340, "repartition_reference": 0.25, "plafonne": false, "plafond": null, "ref": "IPCC 2006 default emission factors (coal, process heat)", "fiabilite": "A_SOURCER" },
+        { "id": "chind_gaz_four", "libelle": "Four à gaz", "source_primaire": "gaz", "vecteur": "direct", "convertisseur": "four industriel", "facteur_combustion": 200, "repartition_reference": 0.40, "plafonne": false, "plafond": null, "ref": "IPCC 2006 default emission factors (natural gas)", "fiabilite": "A_SOURCER" },
+        { "id": "chind_fioul_four", "libelle": "Four à fioul", "source_primaire": "petrole", "vecteur": "direct", "convertisseur": "four industriel", "facteur_combustion": 265, "repartition_reference": 0.15, "plafonne": false, "plafond": null, "ref": "IPCC 2006 default emission factors (fuel oil)", "fiabilite": "A_SOURCER" },
+        { "id": "chind_biomasse_chaudiere", "libelle": "Chaudière biomasse industrielle", "source_primaire": "biomasse", "vecteur": "direct", "convertisseur": "chaudière biomasse", "facteur_combustion": 30, "repartition_reference": 0.10, "plafonne": false, "plafond": null, "ref": "Convention biogénique — cf. points ouverts §4", "fiabilite": "DEBATTU" },
+        { "id": "chind_resistance_nucleaire", "libelle": "Résistance électrique (nucléaire)", "source_primaire": "nucleaire", "vecteur": "electricite", "convertisseur": "résistance industrielle", "facteur_combustion": 12, "repartition_reference": 0.06, "plafonne": false, "plafond": null, "ref": "Facteur électrique nucléaire, cf. exemple poste 3", "fiabilite": "A_SOURCER" },
+        { "id": "chind_resistance_charbon", "libelle": "Résistance électrique (charbon)", "source_primaire": "charbon", "vecteur": "electricite", "convertisseur": "résistance industrielle", "facteur_combustion": 820, "repartition_reference": 0.04, "plafonne": false, "plafond": null, "ref": "Facteur électrique charbon, cf. exemple poste 3", "fiabilite": "A_SOURCER" }
+      ]
+    },
+    {
+      "id": "transport",
+      "nom": "Transport",
+      "volume_annuel": 6.5e13,
+      "unite": "pass·km",
+      "emissions_constatees_mt": 8500,
+      "facteur_procede": 0,
+      "chaines": [
+        { "id": "trans_route_thermique", "libelle": "Route — moteur thermique", "source_primaire": "petrole", "vecteur": "direct", "convertisseur": "moteur thermique", "facteur_combustion": 120, "repartition_reference": 0.750, "plafonne": false, "plafond": null, "ref": "ITF Transport Outlook 2017 Fig 2.1 (route ~79% du monde 2015) moins la part électrique (IEA Global EV Outlook 2024/2025)", "fiabilite": "ROBUSTE" },
+        { "id": "trans_route_electrique", "libelle": "Route — moteur électrique (nucléaire)", "source_primaire": "nucleaire", "vecteur": "electricite", "convertisseur": "moteur électrique", "facteur_combustion": 5, "repartition_reference": 0.039, "plafonne": false, "plafond": null, "ref": "IEA Global EV Outlook 2024/2025 : parc VE ~40-45M / parc mondial ~1,47 Md véhicules ≈ 2,7-3% (voitures) ; estimé ~5% du total route en intégrant bus/2-roues électriques (Chine)", "fiabilite": "ROBUSTE" },
+        { "id": "trans_air", "libelle": "Aviation", "source_primaire": "petrole", "vecteur": "direct", "convertisseur": "turboréacteur", "facteur_combustion": 150, "repartition_reference": 0.131, "plafonne": true, "plafond": 0.05, "ref": "ICAO 2015 (6562 Mrd pkm) / ITF Transport Outlook 2017 Fig 1.13+2.1 (total monde 50000 Mrd pkm) = 13,1%", "fiabilite": "ROBUSTE" },
+        { "id": "trans_rail_nucleaire", "libelle": "Rail électrique (nucléaire)", "source_primaire": "nucleaire", "vecteur": "electricite", "convertisseur": "moteur ferroviaire", "facteur_combustion": 5, "repartition_reference": 0.044, "plafonne": false, "plafond": null, "ref": "ITF Transport Outlook 2017 p.36+Fig1.12 (Chine+Inde >70% du rail mondial, ~4000 Mrd pkm total = 8%)", "fiabilite": "ROBUSTE" },
+        { "id": "trans_rail_charbon", "libelle": "Rail électrique (charbon)", "source_primaire": "charbon", "vecteur": "electricite", "convertisseur": "moteur ferroviaire", "facteur_combustion": 150, "repartition_reference": 0.036, "plafonne": false, "plafond": null, "ref": "ITF Transport Outlook 2017 p.36+Fig1.12 (Chine+Inde >70% du rail mondial, ~4000 Mrd pkm total = 8%)", "fiabilite": "ROBUSTE" }
+      ]
+    },
+    {
+      "id": "chaleur_batiment",
+      "nom": "Chaleur des bâtiments",
+      "volume_annuel": 2.1e13,
+      "unite": "kWh",
+      "emissions_constatees_mt": 5300,
+      "facteur_procede": 0,
+      "chaines": [
+        { "id": "fioul_chaudiere", "libelle": "Chaudière fioul", "source_primaire": "petrole", "vecteur": "direct", "convertisseur": "chaudière", "facteur_combustion": 320, "repartition_reference": 0.12, "plafonne": false, "plafond": null, "ref": "ADEME Base Carbone", "fiabilite": "ETABLI" },
+        { "id": "gaz_chaudiere", "libelle": "Chaudière gaz", "source_primaire": "gaz", "vecteur": "direct", "convertisseur": "chaudière 90 %", "facteur_combustion": 230, "repartition_reference": 0.42, "plafonne": false, "plafond": null, "ref": "ADEME Base Carbone", "fiabilite": "ETABLI" },
+        { "id": "resistance_charbon", "libelle": "Résistance charbon", "source_primaire": "charbon", "vecteur": "electricite", "convertisseur": "résistance", "facteur_combustion": 820, "repartition_reference": 0.06, "plafonne": false, "plafond": null, "ref": "ADEME Base Carbone (mix électrique charbon)", "fiabilite": "ROBUSTE" },
+        { "id": "resistance_nucleaire", "libelle": "Résistance nucléaire", "source_primaire": "nucleaire", "vecteur": "electricite", "convertisseur": "résistance", "facteur_combustion": 12, "repartition_reference": 0.03, "plafonne": false, "plafond": null, "ref": "ADEME Base Carbone (mix électrique nucléaire)", "fiabilite": "ROBUSTE" },
+        { "id": "pac_charbon", "libelle": "PAC charbon", "source_primaire": "charbon", "vecteur": "electricite", "convertisseur": "PAC COP 3,5", "facteur_combustion": 234, "repartition_reference": 0.02, "plafonne": false, "plafond": null, "ref": "820 g/kWh / COP 3,5", "fiabilite": "ROBUSTE" },
+        { "id": "pac_nucleaire", "libelle": "PAC nucléaire", "source_primaire": "nucleaire", "vecteur": "electricite", "convertisseur": "PAC COP 3,5", "facteur_combustion": 3, "repartition_reference": 0.03, "plafonne": false, "plafond": null, "ref": "12 g/kWh / COP 3,5", "fiabilite": "ROBUSTE" },
+        { "id": "pac_eolien", "libelle": "PAC éolien", "source_primaire": "eolien", "vecteur": "electricite", "convertisseur": "PAC COP 3,5", "facteur_combustion": 3, "repartition_reference": 0.02, "plafonne": false, "plafond": null, "ref": "11 g/kWh / COP 3,5", "fiabilite": "ROBUSTE" },
+        { "id": "bois_poele", "libelle": "Bois", "source_primaire": "biomasse", "vecteur": "direct", "convertisseur": "poêle", "facteur_combustion": 30, "repartition_reference": 0.30, "plafonne": false, "plafond": null, "ref": "Convention biogénique — cf. points ouverts §4", "fiabilite": "DEBATTU" }
+      ]
+    },
+    {
+      "id": "ciment",
+      "nom": "Ciment",
+      "volume_annuel": 4.1e9,
+      "unite": "tonne",
+      "emissions_constatees_mt": 2300,
+      "facteur_procede": 384800,
+      "_note": "Facteurs corrigés ×0,74 (recherche 2026-09) : les sources (GHG Protocol/IPCC) donnent des facteurs par tonne de CLINKER, pas de ciment. Ratio mondial clinker/ciment ≈ 0,72-0,76 (WEF Net-Zero Industry Tracker 2023 : 72% ; moyenne mondiale citée : 76%) — fait passer Δp de +33% à -1,8%. Valeurs avant correction : facteur_procede 520000, ciment_charbon 295000, ciment_gaz 180000, ciment_biomasse 30000 (par tonne de clinker).",
+      "chaines": [
+        { "id": "ciment_charbon", "libelle": "Four rotatif — charbon", "source_primaire": "charbon", "vecteur": "direct", "convertisseur": "four rotatif", "facteur_combustion": 218300, "repartition_reference": 0.65, "plafonne": false, "plafond": null, "ref": "GHG Protocol / IPCC (combustion charbon, four ciment, par tonne clinker) × ratio clinker/ciment 0,74", "fiabilite": "ROBUSTE" },
+        { "id": "ciment_gaz", "libelle": "Four rotatif — gaz", "source_primaire": "gaz", "vecteur": "direct", "convertisseur": "four rotatif", "facteur_combustion": 133200, "repartition_reference": 0.15, "plafonne": false, "plafond": null, "ref": "Estimation relative charbon×0,6 (intensité gaz vs charbon) × ratio clinker/ciment 0,74", "fiabilite": "A_SOURCER" },
+        { "id": "ciment_biomasse", "libelle": "Four rotatif — combustibles alternatifs/biomasse", "source_primaire": "biomasse", "vecteur": "direct", "convertisseur": "four rotatif", "facteur_combustion": 22200, "repartition_reference": 0.20, "plafonne": false, "plafond": null, "ref": "Convention biogénique, taux de substitution mondial estimé × ratio clinker/ciment 0,74", "fiabilite": "A_SOURCER" }
+      ]
+    },
+    {
+      "id": "acier",
+      "nom": "Acier",
+      "volume_annuel": 1.9e9,
+      "unite": "tonne",
+      "emissions_constatees_mt": 3200,
+      "facteur_procede": 0,
+      "_note": "Contrairement au ciment, la chimie (réduction du minerai) est intrinsèque à la voie choisie (haut-fourneau vs four à arc) : le plancher n'est pas séparable de la chaîne, il est déjà dans facteur_combustion de chaque chaîne. emissions_constatees_mt corrigé de 1200 à 3200 (voir points ouverts) : 1200 était incompatible avec BF-BOF seul (70% à 2,2 t/t) qui donne déjà ~2900 Mt.",
+      "chaines": [
+        { "id": "acier_haut_fourneau", "libelle": "Haut-fourneau + convertisseur à oxygène", "source_primaire": "charbon", "vecteur": "direct", "convertisseur": "haut-fourneau (BF-BOF)", "facteur_combustion": 2200000, "repartition_reference": 0.700, "plafonne": false, "plafond": null, "ref": "IEEFA / Sustainable Ships (BF-BOF ~2,2 t/t)", "fiabilite": "ROBUSTE" },
+        { "id": "acier_eaf_charbon", "libelle": "Four à arc électrique (grille charbon)", "source_primaire": "charbon", "vecteur": "electricite", "convertisseur": "four à arc électrique (~500 kWh/t)", "facteur_combustion": 510000, "repartition_reference": 0.112, "plafonne": false, "plafond": null, "ref": "820 g/kWh × 500 kWh/t + ~100 kg/t procédé (électrodes, chaux)", "fiabilite": "A_SOURCER" },
+        { "id": "acier_eaf_gaz", "libelle": "Four à arc électrique (grille gaz)", "source_primaire": "gaz", "vecteur": "electricite", "convertisseur": "four à arc électrique (~500 kWh/t)", "facteur_combustion": 345000, "repartition_reference": 0.073, "plafonne": false, "plafond": null, "ref": "490 g/kWh × 500 kWh/t + ~100 kg/t procédé", "fiabilite": "A_SOURCER" },
+        { "id": "acier_eaf_hydraulique", "libelle": "Four à arc électrique (grille hydraulique)", "source_primaire": "hydraulique", "vecteur": "electricite", "convertisseur": "four à arc électrique (~500 kWh/t)", "facteur_combustion": 112000, "repartition_reference": 0.045, "plafonne": false, "plafond": null, "ref": "24 g/kWh × 500 kWh/t + ~100 kg/t procédé", "fiabilite": "A_SOURCER" },
+        { "id": "acier_eaf_nucleaire", "libelle": "Four à arc électrique (grille nucléaire)", "source_primaire": "nucleaire", "vecteur": "electricite", "convertisseur": "four à arc électrique (~500 kWh/t)", "facteur_combustion": 106000, "repartition_reference": 0.028, "plafonne": false, "plafond": null, "ref": "12 g/kWh × 500 kWh/t + ~100 kg/t procédé", "fiabilite": "A_SOURCER" },
+        { "id": "acier_eaf_eolien", "libelle": "Four à arc électrique (grille éolien)", "source_primaire": "eolien", "vecteur": "electricite", "convertisseur": "four à arc électrique (~500 kWh/t)", "facteur_combustion": 105500, "repartition_reference": 0.022, "plafonne": false, "plafond": null, "ref": "11 g/kWh × 500 kWh/t + ~100 kg/t procédé", "fiabilite": "A_SOURCER" },
+        { "id": "acier_dri_h2", "libelle": "Réduction directe hydrogène + four à arc", "source_primaire": "eolien", "vecteur": "hydrogene", "convertisseur": "DRI-H2 + four à arc électrique", "facteur_combustion": 50000, "repartition_reference": 0.020, "plafonne": true, "plafond": 0.05, "ref": "Voie émergente, déploiement marginal en 2024", "fiabilite": "A_SOURCER" }
+      ]
+    },
+    {
+      "id": "ammoniac",
+      "nom": "Ammoniac",
+      "volume_annuel": 1.9e8,
+      "unite": "tonne",
+      "emissions_constatees_mt": 450,
+      "facteur_procede": 0,
+      "_note": "Le CO2 vient du vaporeformage du méthane (production d'hydrogène), pas de la synthèse Haber-Bosch elle-même : comme pour l'acier, le plancher est intrinsèque à la chaîne choisie, pas séparable. emissions_constatees_mt corrigé de 200 à 450 (ordre de grandeur ~1,8% des émissions mondiales, cf. recherche) — encore incertain, A_SOURCER.",
+      "chaines": [
+        { "id": "nh3_smr_gaz", "libelle": "Vaporeformage gaz + Haber-Bosch", "source_primaire": "gaz", "vecteur": "direct", "convertisseur": "SMR + Haber-Bosch", "facteur_combustion": 1900000, "repartition_reference": 0.90, "plafonne": false, "plafond": null, "ref": "RMI / Frontiers (SMR ~1,6-2,5 t CO2/t NH3)", "fiabilite": "ROBUSTE" },
+        { "id": "nh3_gazeification_charbon", "libelle": "Gazéification charbon + Haber-Bosch", "source_primaire": "charbon", "vecteur": "direct", "convertisseur": "gazéification + Haber-Bosch", "facteur_combustion": 3700000, "repartition_reference": 0.08, "plafonne": false, "plafond": null, "ref": "Voie charbon dominante en Chine, estimation ~2x SMR gaz", "fiabilite": "A_SOURCER" },
+        { "id": "nh3_electrolyse_eolien", "libelle": "Électrolyse éolien + Haber-Bosch", "source_primaire": "eolien", "vecteur": "hydrogene", "convertisseur": "électrolyse + Haber-Bosch", "facteur_combustion": 20000, "repartition_reference": 0.02, "plafonne": true, "plafond": 0.05, "ref": "Ammoniac vert, déploiement <2 % en 2024", "fiabilite": "A_SOURCER" }
+      ]
+    },
+    {
+      "id": "force_motrice",
+      "nom": "Force motrice",
+      "volume_annuel": 8e12,
+      "unite": "kWh",
+      "emissions_constatees_mt": 3700,
+      "facteur_procede": 0,
+      "chaines": [
+        { "id": "fm_charbon", "libelle": "Moteur électrique (charbon)", "source_primaire": "charbon", "vecteur": "electricite", "convertisseur": "moteur asynchrone", "facteur_combustion": 820, "repartition_reference": 0.36, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "fm_gaz", "libelle": "Moteur électrique (gaz)", "source_primaire": "gaz", "vecteur": "electricite", "convertisseur": "moteur asynchrone", "facteur_combustion": 490, "repartition_reference": 0.23, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "fm_hydraulique", "libelle": "Moteur électrique (hydraulique)", "source_primaire": "hydraulique", "vecteur": "electricite", "convertisseur": "moteur asynchrone", "facteur_combustion": 24, "repartition_reference": 0.14, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "fm_nucleaire", "libelle": "Moteur électrique (nucléaire)", "source_primaire": "nucleaire", "vecteur": "electricite", "convertisseur": "moteur asynchrone", "facteur_combustion": 12, "repartition_reference": 0.09, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "fm_eolien", "libelle": "Moteur électrique (éolien)", "source_primaire": "eolien", "vecteur": "electricite", "convertisseur": "moteur asynchrone", "facteur_combustion": 11, "repartition_reference": 0.07, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "fm_diesel", "libelle": "Moteur diesel direct (hors-réseau)", "source_primaire": "petrole", "vecteur": "direct", "convertisseur": "moteur diesel", "facteur_combustion": 700, "repartition_reference": 0.11, "plafonne": false, "plafond": null, "ref": "Estimation générateurs/pompes hors-réseau", "fiabilite": "A_SOURCER" }
+      ]
+    },
+    {
+      "id": "froid",
+      "nom": "Froid",
+      "volume_annuel": 1.17e13,
+      "unite": "kWh",
+      "emissions_constatees_mt": 2100,
+      "facteur_procede": 0,
+      "chaines": [
+        { "id": "froid_charbon", "libelle": "Compression (charbon)", "source_primaire": "charbon", "vecteur": "electricite", "convertisseur": "compresseur COP 3,5", "facteur_combustion": 234, "repartition_reference": 0.34, "plafonne": false, "plafond": null, "ref": "820 g/kWh / COP 3,5, mix électrique estimé", "fiabilite": "A_SOURCER" },
+        { "id": "froid_gaz", "libelle": "Compression (gaz)", "source_primaire": "gaz", "vecteur": "electricite", "convertisseur": "compresseur COP 3,5", "facteur_combustion": 140, "repartition_reference": 0.22, "plafonne": false, "plafond": null, "ref": "490 g/kWh / COP 3,5, mix électrique estimé", "fiabilite": "A_SOURCER" },
+        { "id": "froid_hydraulique", "libelle": "Compression (hydraulique)", "source_primaire": "hydraulique", "vecteur": "electricite", "convertisseur": "compresseur COP 3,5", "facteur_combustion": 7, "repartition_reference": 0.14, "plafonne": false, "plafond": null, "ref": "24 g/kWh / COP 3,5, mix électrique estimé", "fiabilite": "A_SOURCER" },
+        { "id": "froid_nucleaire", "libelle": "Compression (nucléaire)", "source_primaire": "nucleaire", "vecteur": "electricite", "convertisseur": "compresseur COP 3,5", "facteur_combustion": 3, "repartition_reference": 0.08, "plafonne": false, "plafond": null, "ref": "12 g/kWh / COP 3,5, mix électrique estimé", "fiabilite": "A_SOURCER" },
+        { "id": "froid_eolien", "libelle": "Compression (éolien)", "source_primaire": "eolien", "vecteur": "electricite", "convertisseur": "compresseur COP 3,5", "facteur_combustion": 3, "repartition_reference": 0.07, "plafonne": false, "plafond": null, "ref": "11 g/kWh / COP 3,5, mix électrique estimé", "fiabilite": "A_SOURCER" },
+        { "id": "froid_absorption_gaz", "libelle": "Absorption gaz direct", "source_primaire": "gaz", "vecteur": "direct", "convertisseur": "machine à absorption", "facteur_combustion": 330, "repartition_reference": 0.15, "plafonne": false, "plafond": null, "ref": "Estimation COP absorption ~0,7", "fiabilite": "A_SOURCER" }
+      ]
+    },
+    {
+      "id": "information",
+      "nom": "Information",
+      "volume_annuel": 1.5e12,
+      "unite": "kWh",
+      "emissions_constatees_mt": 1900,
+      "facteur_procede": 0,
+      "_note": "Intensité implicite 1900 Mt / 1500 TWh = 1267 g/kWh — dépasse même le charbon pur (820 g/kWh), physiquement impossible pour de l'électricité seule. emissions_constatees_mt inclut probablement du carbone incorporé (fabrication matériel IT, réseaux) hors périmètre des chaînes ci-dessous. Décision de portée en attente (cf. points ouverts) : baisser ce chiffre au périmètre électrique seul (~700-900 Mt), ou documenter un Δ structurellement élevé.",
+      "chaines": [
+        { "id": "info_charbon", "libelle": "Datacenters/IT (charbon)", "source_primaire": "charbon", "vecteur": "electricite", "convertisseur": "serveur + refroidissement", "facteur_combustion": 820, "repartition_reference": 0.40, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "info_gaz", "libelle": "Datacenters/IT (gaz)", "source_primaire": "gaz", "vecteur": "electricite", "convertisseur": "serveur + refroidissement", "facteur_combustion": 490, "repartition_reference": 0.26, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "info_hydraulique", "libelle": "Datacenters/IT (hydraulique)", "source_primaire": "hydraulique", "vecteur": "electricite", "convertisseur": "serveur + refroidissement", "facteur_combustion": 24, "repartition_reference": 0.16, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "info_nucleaire", "libelle": "Datacenters/IT (nucléaire)", "source_primaire": "nucleaire", "vecteur": "electricite", "convertisseur": "serveur + refroidissement", "facteur_combustion": 12, "repartition_reference": 0.10, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "info_eolien", "libelle": "Datacenters/IT (éolien)", "source_primaire": "eolien", "vecteur": "electricite", "convertisseur": "serveur + refroidissement", "facteur_combustion": 11, "repartition_reference": 0.08, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" }
+      ]
+    },
+    {
+      "id": "electrochimie_aluminium",
+      "nom": "Électrochimie (aluminium)",
+      "volume_annuel": 7e7,
+      "unite": "tonne",
+      "emissions_constatees_mt": 1100,
+      "facteur_procede": 6200000,
+      "chaines": [
+        { "id": "al_charbon", "libelle": "Électrolyse Hall-Héroult (charbon)", "source_primaire": "charbon", "vecteur": "electricite", "convertisseur": "cuve Hall-Héroult", "facteur_combustion": 13000000, "repartition_reference": 0.60, "plafonne": false, "plafond": null, "ref": "IAI/Statista/AlCircle : Chine ~59% de la prod. mondiale (41 Mt/70 Mt), smelters chinois ~90% charbon", "fiabilite": "ROBUSTE" },
+        { "id": "al_hydraulique", "libelle": "Électrolyse Hall-Héroult (hydraulique)", "source_primaire": "hydraulique", "vecteur": "electricite", "convertisseur": "cuve Hall-Héroult", "facteur_combustion": 300000, "repartition_reference": 0.20, "plafonne": false, "plafond": null, "ref": "Russie (Rusal, hydro-dominant), Canada, Norvège/Islande, part verte chinoise (Yunnan) ~15-20% locale", "fiabilite": "ROBUSTE" },
+        { "id": "al_gaz", "libelle": "Électrolyse Hall-Héroult (gaz)", "source_primaire": "gaz", "vecteur": "electricite", "convertisseur": "cuve Hall-Héroult", "facteur_combustion": 5000000, "repartition_reference": 0.15, "plafonne": false, "plafond": null, "ref": "Estimation : smelters du Golfe (EGA, Alba, Qatalum), grille gaz", "fiabilite": "A_SOURCER" },
+        { "id": "al_nucleaire", "libelle": "Électrolyse Hall-Héroult (nucléaire)", "source_primaire": "nucleaire", "vecteur": "electricite", "convertisseur": "cuve Hall-Héroult", "facteur_combustion": 150000, "repartition_reference": 0.05, "plafonne": false, "plafond": null, "ref": "Estimation résiduelle, part marginale (ex. France, historique)", "fiabilite": "A_SOURCER" }
+      ]
+    },
+    {
+      "id": "lumiere",
+      "nom": "Lumière",
+      "volume_annuel": 1.2e12,
+      "unite": "kWh",
+      "emissions_constatees_mt": 500,
+      "facteur_procede": 0,
+      "chaines": [
+        { "id": "lum_charbon", "libelle": "Éclairage (charbon)", "source_primaire": "charbon", "vecteur": "electricite", "convertisseur": "luminaire LED", "facteur_combustion": 820, "repartition_reference": 0.40, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "lum_gaz", "libelle": "Éclairage (gaz)", "source_primaire": "gaz", "vecteur": "electricite", "convertisseur": "luminaire LED", "facteur_combustion": 490, "repartition_reference": 0.26, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "lum_hydraulique", "libelle": "Éclairage (hydraulique)", "source_primaire": "hydraulique", "vecteur": "electricite", "convertisseur": "luminaire LED", "facteur_combustion": 24, "repartition_reference": 0.16, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "lum_nucleaire", "libelle": "Éclairage (nucléaire)", "source_primaire": "nucleaire", "vecteur": "electricite", "convertisseur": "luminaire LED", "facteur_combustion": 12, "repartition_reference": 0.10, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" },
+        { "id": "lum_eolien", "libelle": "Éclairage (éolien)", "source_primaire": "eolien", "vecteur": "electricite", "convertisseur": "luminaire LED", "facteur_combustion": 11, "repartition_reference": 0.08, "plafonne": false, "plafond": null, "ref": "Mix électrique mondial ~2024 (IEA, estimation)", "fiabilite": "A_SOURCER" }
+      ]
+    }
+  ]
+}
