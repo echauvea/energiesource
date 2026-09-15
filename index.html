@@ -10,8 +10,18 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div class="tuyau tuyau--gauche" aria-hidden="true"></div>
+  <div class="tuyau tuyau--droite" aria-hidden="true"></div>
+
   <svg class="engrenage engrenage--gauche" viewBox="0 0 100 100" aria-hidden="true">
-    <g fill="currentColor">
+    <defs>
+      <radialGradient id="gradEngrenageG" cx="35%" cy="30%" r="80%">
+        <stop offset="0%" style="stop-color:var(--laiton-clair)" />
+        <stop offset="50%" style="stop-color:var(--laiton)" />
+        <stop offset="100%" style="stop-color:var(--laiton-sombre)" />
+      </radialGradient>
+    </defs>
+    <g fill="url(#gradEngrenageG)" stroke="var(--bois)" stroke-width="0.5">
       <path fill-rule="evenodd" d="M50,16 a34,34 0 1,0 0,68 a34,34 0 1,0 0,-68 Z M50,38 a12,12 0 1,0 0,24 a12,12 0 1,0 0,-24 Z" />
       <rect x="46" y="1" width="8" height="15" transform="rotate(0 50 50)" />
       <rect x="46" y="1" width="8" height="15" transform="rotate(45 50 50)" />
@@ -21,10 +31,23 @@
       <rect x="46" y="1" width="8" height="15" transform="rotate(225 50 50)" />
       <rect x="46" y="1" width="8" height="15" transform="rotate(270 50 50)" />
       <rect x="46" y="1" width="8" height="15" transform="rotate(315 50 50)" />
+    </g>
+    <g fill="var(--bois)" opacity="0.7">
+      <circle cx="50" cy="27" r="2" />
+      <circle cx="73" cy="50" r="2" />
+      <circle cx="50" cy="73" r="2" />
+      <circle cx="27" cy="50" r="2" />
     </g>
   </svg>
   <svg class="engrenage engrenage--droite" viewBox="0 0 100 100" aria-hidden="true">
-    <g fill="currentColor">
+    <defs>
+      <radialGradient id="gradEngrenageD" cx="35%" cy="30%" r="80%">
+        <stop offset="0%" style="stop-color:var(--laiton-clair)" />
+        <stop offset="50%" style="stop-color:var(--laiton)" />
+        <stop offset="100%" style="stop-color:var(--laiton-sombre)" />
+      </radialGradient>
+    </defs>
+    <g fill="url(#gradEngrenageD)" stroke="var(--bois)" stroke-width="0.5">
       <path fill-rule="evenodd" d="M50,16 a34,34 0 1,0 0,68 a34,34 0 1,0 0,-68 Z M50,38 a12,12 0 1,0 0,24 a12,12 0 1,0 0,-24 Z" />
       <rect x="46" y="1" width="8" height="15" transform="rotate(0 50 50)" />
       <rect x="46" y="1" width="8" height="15" transform="rotate(45 50 50)" />
@@ -35,6 +58,57 @@
       <rect x="46" y="1" width="8" height="15" transform="rotate(270 50 50)" />
       <rect x="46" y="1" width="8" height="15" transform="rotate(315 50 50)" />
     </g>
+    <g fill="var(--bois)" opacity="0.7">
+      <circle cx="50" cy="27" r="2" />
+      <circle cx="73" cy="50" r="2" />
+      <circle cx="50" cy="73" r="2" />
+      <circle cx="27" cy="50" r="2" />
+    </g>
+  </svg>
+
+  <svg class="lunettes" viewBox="0 0 100 60" aria-hidden="true">
+    <defs>
+      <radialGradient id="verreGrad" cx="35%" cy="30%" r="75%">
+        <stop offset="0%" style="stop-color:#dff0ff" stop-opacity="0.85" />
+        <stop offset="55%" style="stop-color:#7fa9bd" stop-opacity="0.5" />
+        <stop offset="100%" style="stop-color:#141a1d" stop-opacity="0.85" />
+      </radialGradient>
+      <linearGradient id="sangleGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" style="stop-color:var(--cuivre-sombre)" />
+        <stop offset="100%" style="stop-color:var(--cuivre-clair)" />
+      </linearGradient>
+    </defs>
+    <path d="M8,32 C2,18 20,12 30,18" fill="none" stroke="url(#sangleGrad)" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M92,32 C98,18 80,12 70,18" fill="none" stroke="url(#sangleGrad)" stroke-width="3.5" stroke-linecap="round" />
+    <rect x="45" y="29" width="10" height="6" rx="2" fill="var(--laiton-sombre)" stroke="var(--bois)" stroke-width="0.5" />
+    <circle cx="32" cy="32" r="18" fill="url(#verreGrad)" stroke="var(--laiton)" stroke-width="4" />
+    <circle cx="68" cy="32" r="18" fill="url(#verreGrad)" stroke="var(--laiton)" stroke-width="4" />
+    <circle cx="32" cy="32" r="18" fill="none" stroke="var(--bois)" stroke-width="1.5" opacity="0.7" />
+    <circle cx="68" cy="32" r="18" fill="none" stroke="var(--bois)" stroke-width="1.5" opacity="0.7" />
+    <circle cx="26" cy="25" r="3" fill="#ffffff" opacity="0.35" />
+    <circle cx="62" cy="25" r="3" fill="#ffffff" opacity="0.35" />
+  </svg>
+
+  <svg class="eprouvettes" viewBox="0 0 70 110" aria-hidden="true">
+    <defs>
+      <linearGradient id="liquideVert" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" style="stop-color:#a9d98f" />
+        <stop offset="100%" style="stop-color:#4f7a45" />
+      </linearGradient>
+      <linearGradient id="liquideCuivre" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" style="stop-color:var(--cuivre-clair)" />
+        <stop offset="100%" style="stop-color:var(--cuivre-sombre)" />
+      </linearGradient>
+    </defs>
+    <path d="M40,20 L40,88 A9,9 0 0 0 58,88 L58,20 Z" fill="rgba(255,255,255,0.04)" stroke="var(--laiton-sombre)" stroke-width="1.5" opacity="0.85" />
+    <path d="M40,62 L40,88 A9,9 0 0 0 58,88 L58,62 Z" fill="url(#liquideCuivre)" opacity="0.9" />
+    <rect x="37" y="15" width="24" height="6" rx="2.5" fill="var(--laiton-sombre)" opacity="0.9" />
+    <path d="M10,20 L10,80 A12,12 0 0 0 34,80 L34,20 Z" fill="rgba(255,255,255,0.05)" stroke="var(--laiton)" stroke-width="2" />
+    <path d="M10,55 L10,80 A12,12 0 0 0 34,80 L34,55 Z" fill="url(#liquideVert)" />
+    <circle class="bulle bulle-1" cx="17" cy="72" r="2" fill="rgba(255,255,255,0.75)" />
+    <circle class="bulle bulle-2" cx="24" cy="76" r="1.6" fill="rgba(255,255,255,0.65)" />
+    <circle class="bulle bulle-3" cx="20" cy="68" r="1.2" fill="rgba(255,255,255,0.55)" />
+    <rect x="6" y="14" width="32" height="8" rx="3" fill="var(--laiton)" stroke="var(--laiton-sombre)" stroke-width="1.5" />
   </svg>
 
   <header id="total">
