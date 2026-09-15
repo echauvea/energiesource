@@ -1,0 +1,154 @@
+:root {
+  color-scheme: light dark;
+  --fond: #ffffff;
+  --texte: #1a1a1a;
+  --bordure: #d8d8d8;
+  --accent: #1a6b3c;
+  --accent-negatif: #b3261e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fond: #121212;
+    --texte: #e8e8e8;
+    --bordure: #3a3a3a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 1rem;
+  background: var(--fond);
+  color: var(--texte);
+  font-family: system-ui, sans-serif;
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+header#total {
+  border: 1px solid var(--bordure);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+header#total h1 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.5rem;
+  opacity: 0.7;
+}
+
+.total-chiffre {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+#total-ecart {
+  margin: 0.25rem 0 0;
+}
+
+#total-hors {
+  margin: 0.25rem 0 0;
+  opacity: 0.6;
+  font-size: 0.85rem;
+}
+
+.poste {
+  border: 1px solid var(--bordure);
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.poste-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.poste-chevron {
+  width: 1em;
+}
+
+.poste-nom {
+  flex: 1;
+}
+
+.poste-ecart {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+.chaines {
+  padding: 0 1rem 0.5rem;
+}
+
+.chaine {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  border-top: 1px solid var(--bordure);
+}
+
+.chaine-libelle {
+  flex: 0 0 9rem;
+  font-size: 0.9rem;
+}
+
+.chaine-slider {
+  flex: 1;
+}
+
+.chaine-pct {
+  flex: 0 0 3.5rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+}
+
+.chaine-verrou {
+  flex: 0 0 auto;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--bordure);
+  border-radius: 0.3rem;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.chaine-verrouillee {
+  opacity: 0.7;
+}
+
+.chaine-plafond {
+  flex: 0 0 auto;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.poste-reset {
+  margin: 0.5rem 1rem 0.75rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--bordure);
+  border-radius: 0.3rem;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
