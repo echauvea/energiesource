@@ -2,6 +2,7 @@
 // ce fichier ne fait que lire/écrire le DOM et l'état `scenario`.
 
 import { calculer, redistribuer } from './model.js';
+import { lireScenarioDepuisURL, ecrireScenarioDansURL } from './url.js';
 
 let data = null;
 let scenario = {};
@@ -9,6 +10,7 @@ const posteOuverts = new Set();
 
 async function init() {
   data = await fetch('data.json').then((r) => r.json());
+  scenario = lireScenarioDepuisURL();
   render();
 }
 
@@ -27,6 +29,7 @@ function formatPct(pct, { signe = true } = {}) {
 }
 
 function render() {
+  ecrireScenarioDansURL(scenario);
   const resultat = calculer(data, scenario);
   renderTotal(resultat);
   renderPostes(resultat);
@@ -155,6 +158,12 @@ function renderChaine(poste, chaine) {
     plafondNote.textContent = `plafond ${maxPct} %`;
     row.appendChild(plafondNote);
   }
+
+  const fiabiliteNote = document.createElement('span');
+  fiabiliteNote.className = `chaine-fiabilite fiabilite-${chaine.fiabilite.toLowerCase()}`;
+  fiabiliteNote.textContent = chaine.fiabilite;
+  fiabiliteNote.title = chaine.ref;
+  row.appendChild(fiabiliteNote);
 
   return row;
 }

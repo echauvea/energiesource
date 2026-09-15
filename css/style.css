@@ -143,6 +143,23 @@ header#total h1 {
   opacity: 0.6;
 }
 
+.chaine-fiabilite {
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.2rem;
+  cursor: help;
+  opacity: 0.85;
+}
+
+.fiabilite-etabli, .fiabilite-robuste {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.fiabilite-debattu, .fiabilite-a_sourcer {
+  background: color-mix(in srgb, var(--accent-negatif) 15%, transparent);
+}
+
 .poste-reset {
   margin: 0.5rem 1rem 0.75rem;
   padding: 0.4rem 0.8rem;
