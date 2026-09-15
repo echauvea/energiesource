@@ -10,15 +10,15 @@ Chaque poste peut être alimenté par plusieurs **chaînes énergétiques** (sou
 
 ## Statut
 
-🚧 En cours de développement — lot 0 (données) en cours.
+✅ v1 en production : https://energie.echauvea.com
 
 | Lot | Contenu | Statut |
 |---|---|---|
-| 0 | `data.json` complet, 11 postes | En cours |
-| 1 | Moteur de calcul (`model.js`) | À venir |
-| 2 | Interface (curseurs, total) | À venir |
-| 3 | Partage par URL, étiquettes épistémiques | À venir |
-| 4 | Déploiement | À venir |
+| 0 | `data.json` complet, 11 postes | ✅ |
+| 1 | Moteur de calcul (`model.js`) | ✅ |
+| 2 | Interface (curseurs, total) | ✅ |
+| 3 | Partage par URL, étiquettes épistémiques | ✅ |
+| 4 | Déploiement | ✅ |
 
 ## Stack
 
@@ -35,9 +35,13 @@ Chaque poste peut être alimenté par plusieurs **chaînes énergétiques** (sou
 ├── css/style.css
 └── js/
     ├── model.js
+    ├── model.test.js
     ├── ui.js
-    └── url.js
+    ├── url.js
+    └── url.test.js
 ```
+
+Tests : `npm test` (runner natif de Node, aucune dépendance).
 
 ## Données
 
