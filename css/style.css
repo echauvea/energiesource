@@ -280,15 +280,47 @@ header#total h1 {
   color: var(--texte);
 }
 
-.poste-ecart {
-  font-variant-numeric: tabular-nums;
-  color: var(--laiton-clair);
+/* --- Jauge de poste : part actuelle (remplissage) + écart simulé (marqueur) --- */
+
+.poste-jauge {
+  position: relative;
+  flex: 0 0 6rem;
+  height: 0.55rem;
+  margin-left: 0.2rem;
   background: linear-gradient(180deg, var(--bois-clair), var(--bois));
   border: 1px solid var(--laiton-sombre);
   border-radius: 0.25rem;
-  padding: 0.15rem 0.5rem;
-  font-size: 0.85rem;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+  overflow: visible;
+}
+
+.poste-jauge-remplissage {
+  position: absolute;
+  inset: 0 auto 0 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--cuivre-sombre), var(--cuivre-clair));
+  border-radius: 0.2rem 0 0 0.2rem;
+}
+
+.poste-jauge-marqueur {
+  position: absolute;
+  top: -0.25rem;
+  width: 0.45rem;
+  height: 1.05rem;
+  margin-left: -0.225rem;
+  background: var(--laiton-clair);
+  border: 1px solid var(--bois);
+  border-radius: 0.15rem;
+  box-shadow: 0 1px 2px var(--ombre);
+  transition: left 0.15s ease;
+}
+
+.poste-jauge-marqueur--hausse {
+  background: var(--accent-negatif);
+}
+
+.poste-jauge-marqueur--baisse {
+  background: var(--accent);
 }
 
 .chaines {
@@ -395,20 +427,27 @@ header#total h1 {
   color: var(--laiton-clair);
 }
 
-/* --- Bouton de verrou : rivet en cuivre --- */
+/* --- Bouton de verrou : cadenas en laiton --- */
 
 .chaine-verrou {
   flex: 0 0 auto;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.3rem 0.6rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0.3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--laiton-sombre);
   border-radius: 0.3rem;
   background: linear-gradient(180deg, var(--fond-panneau-clair), var(--bois));
   color: var(--texte-att);
   cursor: pointer;
   box-shadow: inset 0 1px 0 rgba(255, 230, 190, 0.1), 0 1px 3px var(--ombre);
+}
+
+.chaine-verrou .icone-cadenas {
+  width: 1.1rem;
+  height: 1.1rem;
 }
 
 .chaine-verrou:hover {
@@ -433,34 +472,29 @@ header#total h1 {
   color: var(--texte-att);
 }
 
-/* --- Étiquettes de fiabilité : cachets de cire --- */
+/* --- Icône d'alerte discrète : seulement pour les chiffres à prendre avec des pincettes --- */
 
-.chaine-fiabilite {
+.chaine-alerte {
   flex: 0 0 auto;
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  padding: 0.15rem 0.5rem;
-  border-radius: 1rem;
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent-negatif);
   cursor: help;
-  border: 1px solid transparent;
 }
 
-.fiabilite-etabli, .fiabilite-robuste {
-  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 55%, var(--bois)), var(--bois));
-  border-color: color-mix(in srgb, var(--accent) 60%, black);
-  color: #e3f0da;
+.chaine-alerte .icone-alerte {
+  width: 1rem;
+  height: 1rem;
 }
 
-.fiabilite-debattu, .fiabilite-a_sourcer {
-  background: linear-gradient(160deg, color-mix(in srgb, var(--accent-negatif) 60%, var(--bois)), var(--bois));
-  border-color: color-mix(in srgb, var(--accent-negatif) 65%, black);
-  color: #f7e2da;
-}
+/* --- Bouton réinitialiser (global) --- */
 
-.poste-reset {
-  margin: 0.4rem 1rem 0.85rem;
-  padding: 0.4rem 0.9rem;
+.reset-global {
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin: 0 auto 1rem;
+  padding: 0.5rem 1.1rem;
   font-family: 'Cinzel', serif;
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -473,7 +507,87 @@ header#total h1 {
   box-shadow: inset 0 1px 0 rgba(255, 230, 190, 0.1), 0 1px 3px var(--ombre);
 }
 
-.poste-reset:hover {
+.reset-global:hover {
   background: linear-gradient(180deg, var(--cuivre-clair), var(--cuivre-sombre));
   color: var(--bois);
+}
+
+/* --- Onglets --- */
+
+.onglets {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.onglet {
+  flex: 1;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 0.5rem;
+  border: 1px solid var(--laiton-sombre);
+  border-radius: 0.4rem 0.4rem 0 0;
+  background: linear-gradient(180deg, var(--fond-panneau-clair), var(--bois));
+  color: var(--texte-att);
+  cursor: pointer;
+}
+
+.onglet[aria-selected='true'] {
+  background: linear-gradient(180deg, var(--cuivre-clair), var(--cuivre-sombre));
+  color: var(--bois);
+  border-color: var(--laiton);
+}
+
+/* --- Onglet d'explication --- */
+
+.explication {
+  position: relative;
+  z-index: 2;
+  background-image:
+    radial-gradient(circle at 90% 90%, rgba(79, 122, 92, 0.08), transparent 40%),
+    linear-gradient(180deg, var(--fond-panneau-clair), var(--fond-panneau) 55%, var(--bois));
+  border: 2px solid var(--bordure);
+  border-radius: 0.4rem;
+  padding: 1.2rem 1.4rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 230, 190, 0.06),
+    inset 0 0 0 1px rgba(201, 154, 68, 0.18),
+    0 3px 8px var(--ombre);
+}
+
+.explication h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--laiton-clair);
+  margin: 1.3rem 0 0.5rem;
+}
+
+.explication h2:first-child {
+  margin-top: 0;
+}
+
+.explication h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: var(--texte);
+  margin: 1rem 0 0.4rem;
+}
+
+.explication p, .explication li {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--texte-att);
+}
+
+.explication strong {
+  color: var(--laiton-clair);
+}
+
+.explication ul {
+  padding-left: 1.2rem;
+  margin: 0.4rem 0;
 }

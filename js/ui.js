@@ -4,6 +4,10 @@
 import { calculer, redistribuer } from './model.js';
 import { lireScenarioDepuisURL, ecrireScenarioDansURL } from './url.js';
 
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const JAUGE_MAX_PCT = 25; // échelle commune à tous les postes (le plus gros poste avoisine 23 %)
+const JAUGE_DECALAGE_MAX_REM = 0.5; // décalage visuel max du marqueur de delta par rapport au bord de la jauge
+
 let data = null;
 let scenario = {};
 const posteOuverts = new Set();
@@ -11,7 +15,23 @@ const posteOuverts = new Set();
 async function init() {
   data = await fetch('data.json').then((r) => r.json());
   scenario = lireScenarioDepuisURL();
+  initOnglets();
+  document.getElementById('reset-global').addEventListener('click', () => {
+    scenario = {};
+    render();
+  });
   render();
+}
+
+function initOnglets() {
+  const onglets = document.querySelectorAll('.onglet');
+  onglets.forEach((bouton) => {
+    bouton.addEventListener('click', () => {
+      onglets.forEach((b) => b.setAttribute('aria-selected', String(b === bouton)));
+      document.getElementById('panel-simulateur').hidden = bouton.id !== 'tab-simulateur';
+      document.getElementById('panel-explication').hidden = bouton.id !== 'tab-explication';
+    });
+  });
 }
 
 function partSimuleeAffichee(chaine) {
@@ -28,6 +48,62 @@ function formatPct(pct, { signe = true } = {}) {
   return `${s}${pct.toFixed(0)} %`;
 }
 
+function svgEl(tag, attrs) {
+  const el = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, String(v));
+  return el;
+}
+
+// Icône de cadenas : anse fermée en boucle, ou pivotée ouverte vers l'extérieur.
+function iconeCadenas(verrouille) {
+  const svg = svgEl('svg', { viewBox: '0 0 24 24', class: 'icone-cadenas', 'aria-hidden': 'true' });
+  const anse = svgEl('path', {
+    d: 'M8,11 V7 a4,4 0 0 1 8,0 v4',
+    fill: 'none',
+    stroke: 'currentColor',
+    'stroke-width': '2.2',
+    'stroke-linecap': 'round',
+  });
+  if (!verrouille) anse.setAttribute('transform', 'rotate(-35 8 11)');
+  svg.appendChild(anse);
+  svg.appendChild(svgEl('rect', { x: '4.5', y: '11', width: '15', height: '9.5', rx: '2', fill: 'currentColor' }));
+  svg.appendChild(svgEl('circle', { cx: '12', cy: '15.5', r: '1.3', fill: 'var(--bois)' }));
+  return svg;
+}
+
+// Icône d'alerte discrète : triangle avec un point d'exclamation évidé.
+function iconeAlerte() {
+  const svg = svgEl('svg', { viewBox: '0 0 24 24', class: 'icone-alerte', 'aria-hidden': 'true' });
+  svg.appendChild(svgEl('path', { d: 'M12,3 L22,20 H2 Z', fill: 'currentColor' }));
+  svg.appendChild(svgEl('rect', { x: '11', y: '9', width: '2', height: '6', fill: 'var(--bois)' }));
+  svg.appendChild(svgEl('rect', { x: '11', y: '16.5', width: '2', height: '2', fill: 'var(--bois)' }));
+  return svg;
+}
+
+// Jauge d'un poste : remplissage = part actuelle dans les émissions des postes modélisés,
+// marqueur = écart simulé vs actuel, en points de % des émissions mondiales (rouge si ça augmente, vert si ça baisse).
+function creerJauge(partActuelle, deltaMondial) {
+  const largeurPct = Math.max(0, Math.min(100, (partActuelle / JAUGE_MAX_PCT) * 100));
+
+  const jauge = document.createElement('span');
+  jauge.className = 'poste-jauge';
+
+  const remplissage = document.createElement('span');
+  remplissage.className = 'poste-jauge-remplissage';
+  remplissage.style.width = `${largeurPct}%`;
+  jauge.appendChild(remplissage);
+
+  const marqueur = document.createElement('span');
+  marqueur.className = 'poste-jauge-marqueur';
+  if (deltaMondial > 0.05) marqueur.classList.add('poste-jauge-marqueur--hausse');
+  else if (deltaMondial < -0.05) marqueur.classList.add('poste-jauge-marqueur--baisse');
+  const decalage = Math.max(-1, Math.min(1, deltaMondial / 5)) * JAUGE_DECALAGE_MAX_REM;
+  marqueur.style.left = `calc(${largeurPct}% + ${decalage}rem)`;
+  jauge.appendChild(marqueur);
+
+  return jauge;
+}
+
 function render() {
   ecrireScenarioDansURL(scenario);
   const resultat = calculer(data, scenario);
@@ -41,35 +117,39 @@ function renderTotal(resultat) {
   const fleche = pct === 0 ? '' : pct < 0 ? '▼ ' : '▲ ';
 
   document.getElementById('total-simule').textContent = `${(simule / 1000).toFixed(1)} Gt CO₂e/an`;
-  document.getElementById('total-ecart').textContent = `${fleche}${formatPct(pct)} vs actuel`;
+  document.getElementById('total-ecart').textContent = `${fleche}${formatPct(pct)}`;
   document.getElementById('total-hors').textContent =
-    `dont hors périmètre ${(data.hors_perimetre_mt / 1000).toFixed(1)} Gt (fixe)`;
+    `Émissions non modélisées (fixes) : ${(data.hors_perimetre_mt / 1000).toFixed(1)} Gt`;
 }
 
 function renderPostes(resultat) {
   const container = document.getElementById('postes');
   container.replaceChildren();
+  const sommeActuelle = data.postes.reduce((s, p) => s + resultat.parPoste[p.id].actuel, 0);
   for (const poste of data.postes) {
-    container.appendChild(renderPoste(poste, resultat));
+    container.appendChild(renderPoste(poste, resultat, sommeActuelle));
   }
 }
 
-function renderPoste(poste, resultat) {
+function renderPoste(poste, resultat, sommeActuelle) {
   const ouvert = posteOuverts.has(poste.id);
   const { simule, actuel } = resultat.parPoste[poste.id];
-  const vsActuel = actuel ? ((simule - actuel) / actuel) * 100 : 0;
-  const deltaP = resultat.ecarts[poste.id]; // écart de calibration (§4.2), pas affiché en clair
+  const partActuelle = sommeActuelle ? (actuel / sommeActuelle) * 100 : 0;
+  const deltaMondial = resultat.total.actuel ? ((simule - actuel) / resultat.total.actuel) * 100 : 0;
 
   const section = document.createElement('section');
   section.className = 'poste';
 
   const header = document.createElement('button');
+  header.type = 'button';
   header.className = 'poste-header';
   header.setAttribute('aria-expanded', String(ouvert));
-  header.title = `Écart au réel (Δp) : ${formatPct(deltaP)} — voir §4.2 du document de conception`;
+  header.title =
+    `Part actuelle dans les émissions des postes modélisés : ${partActuelle.toFixed(1)} %\n` +
+    `Écart simulé : ${formatPct(deltaMondial)} des émissions mondiales`;
   header.innerHTML = `<span class="poste-chevron">${ouvert ? '▾' : '▸'}</span>` +
-    `<span class="poste-nom">${poste.nom}</span>` +
-    `<span class="poste-ecart">${formatPct(vsActuel)}</span>`;
+    `<span class="poste-nom">${poste.nom}</span>`;
+  header.appendChild(creerJauge(partActuelle, deltaMondial));
   header.addEventListener('click', () => {
     if (ouvert) posteOuverts.delete(poste.id);
     else posteOuverts.add(poste.id);
@@ -81,23 +161,15 @@ function renderPoste(poste, resultat) {
     const chainesDiv = document.createElement('div');
     chainesDiv.className = 'chaines';
 
+    // Ordre figé sur la part de référence : ne jamais retrier pendant l'interaction,
+    // sinon les lignes sautent de position quand on déplace un curseur.
     const chainesTriees = [...poste.chaines].sort(
-      (a, b) => partSimuleeAffichee(b) - partSimuleeAffichee(a)
+      (a, b) => b.repartition_reference - a.repartition_reference
     );
     for (const chaine of chainesTriees) {
       chainesDiv.appendChild(renderChaine(poste, chaine));
     }
     section.appendChild(chainesDiv);
-
-    const resetBtn = document.createElement('button');
-    resetBtn.className = 'poste-reset';
-    resetBtn.textContent = 'Réinitialiser';
-    resetBtn.addEventListener('click', () => {
-      scenario = structuredClone(scenario);
-      for (const c of poste.chaines) delete scenario[c.id];
-      render();
-    });
-    section.appendChild(resetBtn);
   }
 
   return section;
@@ -147,9 +219,12 @@ function renderChaine(poste, chaine) {
   });
 
   const lockBtn = document.createElement('button');
+  lockBtn.type = 'button';
   lockBtn.className = 'chaine-verrou';
-  lockBtn.textContent = verrou ? 'Verrouillé' : 'Verrouiller';
   lockBtn.setAttribute('aria-pressed', String(verrou));
+  lockBtn.setAttribute('aria-label', verrou ? 'Déverrouiller cette chaîne' : 'Verrouiller cette chaîne');
+  lockBtn.title = verrou ? 'Verrouillé' : 'Verrouiller';
+  lockBtn.appendChild(iconeCadenas(verrou));
   lockBtn.addEventListener('click', () => {
     scenario = structuredClone(scenario);
     scenario[chaine.id] = { repartition_simulee: wActuel, verrou: !verrou };
@@ -164,11 +239,17 @@ function renderChaine(poste, chaine) {
     row.appendChild(plafondNote);
   }
 
-  const fiabiliteNote = document.createElement('span');
-  fiabiliteNote.className = `chaine-fiabilite fiabilite-${chaine.fiabilite.toLowerCase()}`;
-  fiabiliteNote.textContent = chaine.fiabilite;
-  fiabiliteNote.title = chaine.ref;
-  row.appendChild(fiabiliteNote);
+  // Icône discrète : seulement pour les chiffres à prendre avec des pincettes.
+  if (chaine.fiabilite === 'DEBATTU' || chaine.fiabilite === 'A_SOURCER') {
+    const alerte = document.createElement('span');
+    alerte.className = 'chaine-alerte';
+    alerte.title =
+      (chaine.fiabilite === 'DEBATTU'
+        ? 'Chiffre non contesté, mais méthode de comptage débattue scientifiquement'
+        : 'Estimation de travail, pas encore vérifiée') + ` — ${chaine.ref}`;
+    alerte.appendChild(iconeAlerte());
+    row.appendChild(alerte);
+  }
 
   return row;
 }
