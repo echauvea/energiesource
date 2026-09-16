@@ -74,15 +74,31 @@ h1, .poste-nom, .chaine-libelle {
   position: fixed;
   top: 0;
   bottom: 0;
-  width: 1.5rem;
+  width: 1.7rem;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.7;
   background:
-    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0 0.3rem, transparent 0.3rem 6rem),
-    repeating-linear-gradient(180deg, rgba(255, 220, 180, 0.12) 0.3rem 0.45rem, transparent 0.45rem 6rem),
-    linear-gradient(90deg, var(--cuivre-sombre) 0%, var(--cuivre-clair) 30%, var(--cuivre) 55%, var(--bois) 100%);
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7), 2px 0 10px var(--ombre);
+    /* rivets sur chaque bride */
+    radial-gradient(circle at 30% 0.4rem, rgba(255, 235, 200, 0.5) 0 0.06rem, transparent 0.09rem) 0 0/100% 6rem repeat,
+    radial-gradient(circle at 70% 0.4rem, rgba(255, 235, 200, 0.5) 0 0.06rem, transparent 0.09rem) 0 0/100% 6rem repeat,
+    /* brides (joints) sombres périodiques */
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0 0.35rem, transparent 0.35rem 6rem),
+    repeating-linear-gradient(180deg, rgba(255, 220, 180, 0.15) 0.35rem 0.5rem, transparent 0.5rem 6rem),
+    /* galbe cylindrique cuivre : ombre / reflet / coeur clair / reflet / ombre */
+    linear-gradient(
+      90deg,
+      var(--bois) 0%,
+      var(--cuivre-sombre) 12%,
+      var(--cuivre) 30%,
+      var(--cuivre-clair) 48%,
+      #ffe9c8 54%,
+      var(--cuivre-clair) 60%,
+      var(--cuivre) 76%,
+      var(--cuivre-sombre) 92%,
+      var(--bois) 100%
+    );
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.75), 2px 0 12px var(--ombre);
 }
 
 .tuyau--gauche {
@@ -91,7 +107,64 @@ h1, .poste-nom, .chaine-libelle {
 
 .tuyau--droite {
   right: -0.1rem;
+}
+
+/* --- Coudes/robinets en cuivre, greffés sur la tuyauterie --- */
+
+.coude {
+  position: fixed;
+  width: 4.5rem;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px var(--ombre));
+}
+
+.coude--gauche {
+  top: 22rem;
+  left: 0.3rem;
+}
+
+.coude--droite {
+  top: 34rem;
+  right: 0.3rem;
   transform: scaleX(-1);
+}
+
+/* --- Éclairs électriques occasionnels --- */
+
+.eclair {
+  position: fixed;
+  width: 2.2rem;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  filter: drop-shadow(0 0 6px #bfe8ff) drop-shadow(0 0 12px #6fb6e0);
+  animation: crepiter 9s ease-in-out infinite;
+}
+
+.eclair--1 {
+  top: 21rem;
+  left: 1.6rem;
+  animation-duration: 11s;
+  animation-delay: 1.5s;
+}
+
+.eclair--2 {
+  top: 33.5rem;
+  right: 1.6rem;
+  transform: scaleX(-1);
+  animation-duration: 8s;
+  animation-delay: 4s;
+}
+
+@keyframes crepiter {
+  0%, 92%, 100% { opacity: 0; }
+  92.5% { opacity: 1; }
+  93% { opacity: 0.2; }
+  93.5% { opacity: 0.9; }
+  94.5% { opacity: 0; }
+  95% { opacity: 0.6; }
+  95.5% { opacity: 0; }
 }
 
 /* --- Engrenages décoratifs --- */
@@ -123,18 +196,25 @@ h1, .poste-nom, .chaine-libelle {
   to { transform: rotate(360deg); }
 }
 
-/* --- Lunettes de laborantin --- */
-
-.lunettes {
+.engrenage-mini {
   position: fixed;
-  width: 7rem;
-  top: 15rem;
-  right: -0.5rem;
-  opacity: 0.55;
-  filter: drop-shadow(0 3px 5px var(--ombre));
+  width: 2.6rem;
+  height: 2.6rem;
+  filter: drop-shadow(0 2px 3px var(--ombre));
   pointer-events: none;
   z-index: 1;
-  transform: rotate(-8deg);
+  animation: tourner 22s linear infinite reverse;
+}
+
+.engrenage-mini--gauche {
+  top: 6.3rem;
+  left: 2.9rem;
+}
+
+.engrenage-mini--droite {
+  top: 8.3rem;
+  right: 2.9rem;
+  animation-direction: normal;
 }
 
 /* --- Éprouvettes en fond de laboratoire --- */
@@ -178,7 +258,7 @@ h1, .poste-nom, .chaine-libelle {
     width: 0.8rem;
     opacity: 0.4;
   }
-  .lunettes, .eprouvettes {
+  .engrenage-mini, .eprouvettes, .coude, .eclair {
     display: none;
   }
 }
