@@ -5,8 +5,6 @@ import { calculer, redistribuer } from './model.js';
 import { lireScenarioDepuisURL, ecrireScenarioDansURL } from './url.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const JAUGE_MAX_PCT = 25; // échelle commune à tous les postes (le plus gros poste avoisine 23 %)
-const JAUGE_DECALAGE_MAX_REM = 0.5; // décalage visuel max du marqueur de delta par rapport au bord de la jauge
 
 let data = null;
 let scenario = {};
@@ -80,28 +78,27 @@ function iconeAlerte() {
   return svg;
 }
 
-// Jauge d'un poste : remplissage = part actuelle dans les émissions des postes modélisés,
-// marqueur = écart simulé vs actuel, en points de % des émissions mondiales (rouge si ça augmente, vert si ça baisse).
-function creerJauge(partActuelle, deltaMondial) {
-  const largeurPct = Math.max(0, Math.min(100, (partActuelle / JAUGE_MAX_PCT) * 100));
+// Deux pastilles chiffrées : la part actuelle du poste dans les émissions des postes
+// modélisés (neutre), et l'écart simulé vs actuel en points de % des émissions mondiales
+// (colorée rouge si ça augmente, verte si ça baisse).
+function creerIndicateursPoste(partActuelle, deltaMondial) {
+  const conteneur = document.createElement('span');
+  conteneur.className = 'poste-indicateurs';
 
-  const jauge = document.createElement('span');
-  jauge.className = 'poste-jauge';
+  const part = document.createElement('span');
+  part.className = 'poste-part';
+  part.textContent = `${Math.round(partActuelle)} %`;
+  conteneur.appendChild(part);
 
-  const remplissage = document.createElement('span');
-  remplissage.className = 'poste-jauge-remplissage';
-  remplissage.style.width = `${largeurPct}%`;
-  jauge.appendChild(remplissage);
+  const delta = document.createElement('span');
+  delta.className = 'poste-delta';
+  const fleche = deltaMondial > 0.05 ? '▲ ' : deltaMondial < -0.05 ? '▼ ' : '';
+  delta.textContent = `${fleche}${formatPct(deltaMondial)}`;
+  if (deltaMondial > 0.05) delta.classList.add('poste-delta--hausse');
+  else if (deltaMondial < -0.05) delta.classList.add('poste-delta--baisse');
+  conteneur.appendChild(delta);
 
-  const marqueur = document.createElement('span');
-  marqueur.className = 'poste-jauge-marqueur';
-  if (deltaMondial > 0.05) marqueur.classList.add('poste-jauge-marqueur--hausse');
-  else if (deltaMondial < -0.05) marqueur.classList.add('poste-jauge-marqueur--baisse');
-  const decalage = Math.max(-1, Math.min(1, deltaMondial / 5)) * JAUGE_DECALAGE_MAX_REM;
-  marqueur.style.left = `calc(${largeurPct}% + ${decalage}rem)`;
-  jauge.appendChild(marqueur);
-
-  return jauge;
+  return conteneur;
 }
 
 function render() {
@@ -145,11 +142,11 @@ function renderPoste(poste, resultat, sommeActuelle) {
   header.className = 'poste-header';
   header.setAttribute('aria-expanded', String(ouvert));
   header.title =
-    `Part actuelle dans les émissions des postes modélisés : ${partActuelle.toFixed(1)} %\n` +
-    `Écart simulé : ${formatPct(deltaMondial)} des émissions mondiales`;
+    `Part actuelle dans les émissions des postes modélisés — ` +
+    `Écart simulé, en points de % des émissions mondiales`;
   header.innerHTML = `<span class="poste-chevron">${ouvert ? '▾' : '▸'}</span>` +
     `<span class="poste-nom">${poste.nom}</span>`;
-  header.appendChild(creerJauge(partActuelle, deltaMondial));
+  header.appendChild(creerIndicateursPoste(partActuelle, deltaMondial));
   header.addEventListener('click', () => {
     if (ouvert) posteOuverts.delete(poste.id);
     else posteOuverts.add(poste.id);

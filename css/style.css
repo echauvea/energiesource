@@ -360,47 +360,41 @@ header#total h1 {
   color: var(--texte);
 }
 
-/* --- Jauge de poste : part actuelle (remplissage) + écart simulé (marqueur) --- */
+/* --- Indicateurs de poste : part actuelle (neutre) + écart simulé (coloré) --- */
 
-.poste-jauge {
-  position: relative;
-  flex: 0 0 6rem;
-  height: 0.55rem;
-  margin-left: 0.2rem;
+.poste-indicateurs {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.poste-part, .poste-delta {
+  font-variant-numeric: tabular-nums;
+  color: var(--texte-att);
   background: linear-gradient(180deg, var(--bois-clair), var(--bois));
   border: 1px solid var(--laiton-sombre);
   border-radius: 0.25rem;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
-  overflow: visible;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.78rem;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
-.poste-jauge-remplissage {
-  position: absolute;
-  inset: 0 auto 0 0;
-  height: 100%;
-  background: linear-gradient(90deg, var(--cuivre-sombre), var(--cuivre-clair));
-  border-radius: 0.2rem 0 0 0.2rem;
+.poste-delta {
+  min-width: 3.6rem;
+  text-align: center;
 }
 
-.poste-jauge-marqueur {
-  position: absolute;
-  top: -0.25rem;
-  width: 0.45rem;
-  height: 1.05rem;
-  margin-left: -0.225rem;
-  background: var(--laiton-clair);
-  border: 1px solid var(--bois);
-  border-radius: 0.15rem;
-  box-shadow: 0 1px 2px var(--ombre);
-  transition: left 0.15s ease;
+.poste-delta--hausse {
+  color: #f7e2da;
+  border-color: color-mix(in srgb, var(--accent-negatif) 55%, black);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent-negatif) 45%, var(--bois)), var(--bois));
 }
 
-.poste-jauge-marqueur--hausse {
-  background: var(--accent-negatif);
-}
-
-.poste-jauge-marqueur--baisse {
-  background: var(--accent);
+.poste-delta--baisse {
+  color: #e3f0da;
+  border-color: color-mix(in srgb, var(--accent) 55%, black);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 45%, var(--bois)), var(--bois));
 }
 
 .chaines {
